@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>パチンコボーダーチェッカー</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ボーダーチェッカー">
+  <title>パチンコボーダーチェッカー v1.0</title>
+
+  <!-- iPhoneホーム画面用アイコン（「B」アイコンをJSで自動生成して指定） -->
+  <link rel="apple-touch-icon" id="appleTouchIcon">
+
   <style>
     :root {
       --bg-color: #121214;
@@ -42,10 +48,26 @@
       border-bottom: 1px solid var(--border-color);
     }
 
+    .title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
     h1 {
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--accent-color);
+    }
+
+    .app-version {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      background: #2a2a35;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
     }
 
     .config-btn {
@@ -210,7 +232,7 @@
       font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
-      z-index: 1001; /* 危険モード時も押せるように */
+      z-index: 1001;
     }
 
     /* 判定結果表示エリア */
@@ -221,7 +243,7 @@
       margin-bottom: 16px;
       border: 1px solid var(--border-color);
       text-align: center;
-      display: none; /* 初期状態は非表示 */
+      display: none;
     }
 
     .result-holder {
@@ -283,7 +305,14 @@
       justify-content: space-between;
     }
 
-    /* モーダル（ボーダー設定） */
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    /* モーダル */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -349,9 +378,7 @@
     .modal-save { background: var(--accent-color); color: #000; }
     .modal-cancel { background: #333; color: #fff; }
 
-    /* -----------------------------------
-       51%未満：完全撤退（危険演出）
-    ----------------------------------- */
+    /* 51%未満：緊急演出 */
     body.danger-mode {
       animation: emergency-bg 0.5s infinite alternate;
     }
@@ -416,7 +443,6 @@
       font-size: 0.85rem;
     }
 
-    /* 画面ロック制御 */
     body.danger-mode .lockable {
       pointer-events: none;
       opacity: 0.3;
@@ -425,6 +451,7 @@
 </head>
 <body>
 
+  <!-- 危険時オーバーレイ（画面ロック） -->
   <div class="danger-overlay">
     <div class="danger-box">
       <div class="danger-title">⚠️ 警告 ⚠️</div>
@@ -434,15 +461,20 @@
   </div>
 
   <header class="lockable">
-    <h1>ボーダーチェッカー</h1>
+    <div class="title-group">
+      <h1>ボーダーチェッカー</h1>
+      <span class="app-version">v1.0</span>
+    </div>
     <button class="config-btn" id="openConfig">⚙️ ボーダー設定</button>
   </header>
 
+  <!-- タイプ選択 -->
   <div class="type-selector lockable">
     <button class="type-btn active" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
     <button class="type-btn" id="typeNormal" onclick="setType('normal')">通常ヘソ<br><small id="dispBorderNormal" style="font-size:0.75rem; font-weight:normal;"></small></button>
   </div>
 
+  <!-- 回転数・投資入力 -->
   <div class="card lockable">
     <div class="input-group">
       <label for="startRot">打ち始め回転数</label>
@@ -467,11 +499,13 @@
     </div>
   </div>
 
+  <!-- 操作ボタン -->
   <div class="action-group">
     <button class="judge-btn lockable" onclick="calculate()">判定する</button>
     <button class="reset-btn" onclick="allReset()">オール<br>リセット</button>
   </div>
 
+  <!-- 判定結果表示エリア -->
   <div class="result-card lockable" id="resultCard">
     <div class="result-holder" id="resRetention">--</div>
     <div class="result-stats">
@@ -486,6 +520,7 @@
     </div>
   </div>
 
+  <!-- 解説＆運用ガイド -->
   <div class="guide-card lockable">
     <div class="guide-title">💡 判定・保留連動ルール</div>
     <ul class="guide-list">
@@ -496,11 +531,16 @@
       <li><span>51% 以上</span><span style="color:#e0e0e0; font-weight:bold;">⚪ 白保留（激辛・即退散）</span></li>
       <li><span>51% 未満</span><span style="color:#ff1744; font-weight:bold;">💀 完全撤退（危険）</span></li>
     </ul>
-    <div style="border-top: 1px solid #2a2a35; pt: 6px; margin-top: 6px; font-size: 0.75rem; color: #8a8a9e;">
+    <div style="border-top: 1px solid #2a2a35; padding-top: 6px; margin-top: 6px; font-size: 0.75rem; color: #8a8a9e;">
       📌 <strong>立ち回り目安：</strong>デカヘソは<strong>3k時点</strong>、通常ヘソは<strong>5k時点</strong>で最終的な合格判断を行うのが最適です。
     </div>
   </div>
 
+  <footer class="lockable">
+    Border Checker ver 1.0
+  </footer>
+
+  <!-- ボーダー設定モーダル -->
   <div class="modal-overlay" id="configModal">
     <div class="modal">
       <div class="modal-title">ボーダー初期値設定</div>
@@ -520,20 +560,41 @@
   </div>
 
   <script>
-    // 定数・状態変数
     const LS_KEY_BIG = 'p_border_big';
     const LS_KEY_NORMAL = 'p_border_normal';
 
-    let currentType = 'big'; // 'big' or 'normal'
+    let currentType = 'big';
     let currentK = 0;
     let borderBig = 28.0;
     let borderNormal = 18.0;
 
-    // 初期化処理
     window.addEventListener('DOMContentLoaded', () => {
+      generateAppleIcon();
       loadSettings();
       updateTypeUI();
     });
+
+    // iPhone用「B」アイコン自動生成 (180x180 PNG Data URI)
+    function generateAppleIcon() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 180;
+      canvas.height = 180;
+      const ctx = canvas.getContext('2d');
+
+      // 背景（ダークグレー）
+      ctx.fillStyle = '#121214';
+      ctx.fillRect(0, 0, 180, 180);
+
+      // 中央の「B」（ネオンブルー）
+      ctx.fillStyle = '#00e5ff';
+      ctx.font = 'bold 125px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('B', 90, 96);
+
+      const iconUrl = canvas.toDataURL('image/png');
+      document.getElementById('appleTouchIcon').href = iconUrl;
+    }
 
     // 設定ロード
     function loadSettings() {
@@ -564,7 +625,7 @@
       document.getElementById('kVal').innerText = currentK;
     }
 
-    // 判定処理（判定ボタン押下時のみ実行）
+    // 判定処理
     function calculate() {
       const startRot = parseFloat(document.getElementById('startRot').value);
       const currentRot = parseFloat(document.getElementById('currentRot').value);
@@ -584,7 +645,6 @@
       const targetBorder = (currentType === 'big') ? borderBig : borderNormal;
       const rate = (perK / targetBorder) * 100;
 
-      // 表示更新
       const resCard = document.getElementById('resultCard');
       const resRetention = document.getElementById('resRetention');
       const resRate = document.getElementById('resRate');
@@ -594,7 +654,6 @@
       resRate.innerText = `${rate.toFixed(1)}%`;
       resPerK.innerText = `${perK.toFixed(1)} 回`;
 
-      // 保留演出判定
       if (rate >= 100) {
         resRetention.innerHTML = '<span style="color:#00ffff;">🌈 虹保留</span>';
       } else if (rate >= 95) {
@@ -606,18 +665,15 @@
       } else if (rate >= 51) {
         resRetention.innerHTML = '<span style="color:#e0e0e0;">⚪ 白保留</span>';
       } else {
-        // 51%未満：緊急撤退（危険演出モード起動）
         resRetention.innerHTML = '<span style="color:#ff1744;">💀 完全撤退</span>';
         triggerDangerMode();
       }
     }
 
-    // 危険演出・画面ロック発動
     function triggerDangerMode() {
       document.body.classList.add('danger-mode');
     }
 
-    // オールリセット
     function allReset() {
       document.body.classList.remove('danger-mode');
       document.getElementById('startRot').value = '';
