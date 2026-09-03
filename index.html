@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-title" content="ボーダーチェッカー">
   <title>パチンコボーダーチェッカー v1.0</title>
 
-  <!-- iPhoneホーム画面用アイコン（「B」アイコンをJSで自動生成して指定） -->
+  <!-- iPhoneホーム画面用アイコン -->
   <link rel="apple-touch-icon" id="appleTouchIcon">
 
   <style>
@@ -27,7 +27,7 @@
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation; /* 連打時のダブルタップズームを防止 */
+      touch-action: manipulation;
     }
 
     body {
@@ -81,7 +81,6 @@
       cursor: pointer;
     }
 
-    /* タイプ選択トグル */
     .type-selector {
       display: flex;
       gap: 8px;
@@ -109,7 +108,6 @@
       box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
     }
 
-    /* メインカード */
     .card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -129,7 +127,6 @@
       margin-bottom: 6px;
     }
 
-    /* 大きめの数値入力欄 */
     .big-input {
       width: 100%;
       height: 54px;
@@ -147,7 +144,6 @@
       border-color: var(--accent-color);
     }
 
-    /* 投資(k)コントロール */
     .investment-control {
       display: flex;
       align-items: center;
@@ -203,7 +199,6 @@
       color: var(--text-sub);
     }
 
-    /* アクションボタン群 */
     .action-group {
       display: flex;
       gap: 10px;
@@ -235,7 +230,6 @@
       cursor: pointer;
     }
 
-    /* 判定結果表示エリア */
     .result-card {
       background: var(--card-bg);
       border-radius: 12px;
@@ -276,7 +270,6 @@
       font-weight: bold;
     }
 
-    /* 解説エリア */
     .guide-card {
       background: #18181c;
       border-radius: 8px;
@@ -312,7 +305,6 @@
       color: var(--text-sub);
     }
 
-    /* モーダル */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -378,7 +370,6 @@
     .modal-save { background: var(--accent-color); color: #000; }
     .modal-cancel { background: #333; color: #fff; }
 
-    /* 51%未満：緊急演出 */
     body.danger-mode {
       animation: emergency-bg 0.5s infinite alternate;
     }
@@ -462,7 +453,7 @@
 </head>
 <body>
 
-  <!-- 危険時オーバーレイ（画面ロック） -->
+  <!-- 危険時オーバーレイ -->
   <div class="danger-overlay">
     <div class="danger-box">
       <div class="danger-title">⚠️ 警告 ⚠️</div>
@@ -479,7 +470,7 @@
     <button class="config-btn" id="openConfig">⚙️ ボーダー設定</button>
   </header>
 
-  <!-- タイプ選択（初期は未選択） -->
+  <!-- タイプ選択 -->
   <div class="type-selector lockable">
     <button class="type-btn" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
     <button class="type-btn" id="typeNormal" onclick="setType('normal')">通常ヘソ<br><small id="dispBorderNormal" style="font-size:0.75rem; font-weight:normal;"></small></button>
@@ -573,8 +564,9 @@
   <script>
     const LS_KEY_BIG = 'p_border_big';
     const LS_KEY_NORMAL = 'p_border_normal';
+    const LS_KEY_SESSION = 'p_border_session_data';
 
-    let currentType = null; // 初期値は未選択 (null)
+    let currentType = null;
     let currentK = 0;
     let borderBig = 28.0;
     let borderNormal = 18.0;
@@ -582,10 +574,15 @@
     window.addEventListener('DOMContentLoaded', () => {
       generateAppleIcon();
       loadSettings();
+      loadSessionState();
       updateTypeUI();
+
+      // 入力値変更の度に自動保存
+      document.getElementById('startRot').addEventListener('input', saveSessionState);
+      document.getElementById('currentRot').addEventListener('input', saveSessionState);
     });
 
-    // iPhone用「B」アイコン自動生成 (180x180 PNG Data URI)
+    // iPhone用アイコン自動生成
     function generateAppleIcon() {
       const canvas = document.createElement('canvas');
       canvas.width = 180;
@@ -617,10 +614,47 @@
       document.getElementById('dispBorderNormal').innerText = `(${borderNormal.toFixed(1)}/1k)`;
     }
 
+    // 計測セッション状態の保存
+    function saveSessionState() {
+      const session = {
+        startRot: document.getElementById('startRot').value,
+        currentRot: document.getElementById('currentRot').value,
+        currentK: currentK,
+        currentType: currentType,
+        hasCalculated: document.getElementById('resultCard').style.display === 'block'
+      };
+      localStorage.setItem(LS_KEY_SESSION, JSON.stringify(session));
+    }
+
+    // 計測セッション状態の復元
+    function loadSessionState() {
+      const saved = localStorage.getItem(LS_KEY_SESSION);
+      if (!saved) return;
+
+      try {
+        const session = JSON.parse(saved);
+        if (session.startRot !== undefined) document.getElementById('startRot').value = session.startRot;
+        if (session.currentRot !== undefined) document.getElementById('currentRot').value = session.currentRot;
+        if (session.currentK !== undefined) {
+          currentK = parseInt(session.currentK, 10) || 0;
+          document.getElementById('kVal').innerText = currentK;
+        }
+        if (session.currentType) {
+          currentType = session.currentType;
+        }
+        if (session.hasCalculated && currentType && currentK > 0) {
+          calculate(true); // サイレント再計算（アラート抑止）
+        }
+      } catch (e) {
+        console.error('Session restore failed:', e);
+      }
+    }
+
     // タイプ切り替え
     function setType(type) {
       currentType = type;
       updateTypeUI();
+      saveSessionState();
     }
 
     function updateTypeUI() {
@@ -632,12 +666,13 @@
     function changeK(delta) {
       currentK = Math.max(0, currentK + delta);
       document.getElementById('kVal').innerText = currentK;
+      saveSessionState();
     }
 
-    // 判定処理
-    function calculate() {
+    // 判定処理 (isRestore = 復元時判定フラグ)
+    function calculate(isRestore = false) {
       if (!currentType) {
-        alert('スペック（「デカヘソ」または「通常ヘソ」）を選択してください。');
+        if (!isRestore) alert('スペック（「デカヘソ」または「通常ヘソ」）を選択してください。');
         return;
       }
 
@@ -645,12 +680,12 @@
       const currentRot = parseFloat(document.getElementById('currentRot').value);
 
       if (isNaN(startRot) || isNaN(currentRot) || currentK <= 0) {
-        alert('「打ち始め回転数」「投資k」「現在の回転数」を正しい数値で入力してください。');
+        if (!isRestore) alert('「打ち始め回転数」「投資k」「現在の回転数」を正しい数値で入力してください。');
         return;
       }
 
       if (currentRot <= startRot) {
-        alert('現在の回転数は、打ち始め回転数より大きい値を入力してください。');
+        if (!isRestore) alert('現在の回転数は、打ち始め回転数より大きい値を入力してください。');
         return;
       }
 
@@ -682,6 +717,8 @@
         resRetention.innerHTML = '<span style="color:#ff1744;">💀 完全撤退</span>';
         triggerDangerMode();
       }
+
+      saveSessionState();
     }
 
     function triggerDangerMode() {
@@ -689,11 +726,12 @@
     }
 
     function allReset() {
+      localStorage.removeItem(LS_KEY_SESSION);
       document.body.classList.remove('danger-mode');
       document.getElementById('startRot').value = '';
       document.getElementById('currentRot').value = '';
       currentK = 0;
-      currentType = null; // リセット時に未選択状態へ戻す
+      currentType = null;
       updateTypeUI();
       document.getElementById('kVal').innerText = '0';
       document.getElementById('resultCard').style.display = 'none';
