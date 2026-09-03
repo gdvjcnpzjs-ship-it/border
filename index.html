@@ -233,7 +233,6 @@
       font-size: 0.95rem;
       font-weight: bold;
       cursor: pointer;
-      z-index: 1001;
     }
 
     /* 判定結果表示エリア */
@@ -393,10 +392,8 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255, 0, 0, 0.25);
-      z-index: 1000;
-      pointer-events: all;
-      flex-direction: column;
+      background: rgba(255, 0, 0, 0.35);
+      z-index: 3000;
       justify-content: center;
       align-items: center;
       padding: 20px;
@@ -415,7 +412,8 @@
       padding: 24px;
       text-align: center;
       animation: danger-pulse 0.3s infinite alternate;
-      max-width: 90%;
+      max-width: 320px;
+      width: 100%;
     }
 
     @keyframes danger-pulse {
@@ -433,15 +431,27 @@
 
     .danger-msg {
       color: #ffffff;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       line-height: 1.4;
       margin-bottom: 16px;
     }
 
-    .danger-hint {
-      color: #ffaa00;
-      font-size: 0.85rem;
+    .danger-reset-btn {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, #ff1744, #d50000);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 23, 68, 0.5);
+    }
+
+    .danger-reset-btn:active {
+      transform: scale(0.97);
     }
 
     body.danger-mode .lockable {
@@ -457,7 +467,7 @@
     <div class="danger-box">
       <div class="danger-title">⚠️ 警告 ⚠️</div>
       <div class="danger-msg">この台は破損しています！<br>すぐに退避してください！</div>
-      <div class="danger-hint">※解除するには下の「オールリセット」を押してください</div>
+      <button class="danger-reset-btn" onclick="allReset()">オールリセットして復帰</button>
     </div>
   </div>
 
@@ -503,7 +513,7 @@
   <!-- 操作ボタン -->
   <div class="action-group">
     <button class="judge-btn lockable" onclick="calculate()">判定する</button>
-    <button class="reset-btn" onclick="allReset()">オール<br>リセット</button>
+    <button class="reset-btn lockable" onclick="allReset()">オール<br>リセット</button>
   </div>
 
   <!-- 判定結果表示エリア -->
