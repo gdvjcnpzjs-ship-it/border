@@ -3,88 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>パチンコ回転率カウンター</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ボーダーチェッカー">
+  <title>パチンコボーダーチェッカー v1.0</title>
+
+  <!-- iPhoneホーム画面用アイコン（「B」アイコンをJSで自動生成して指定） -->
+  <link rel="apple-touch-icon" id="appleTouchIcon">
+
   <style>
+    :root {
+      --bg-color: #121214;
+      --card-bg: #1e1e24;
+      --accent-color: #00e5ff;
+      --danger-color: #ff1744;
+      --text-color: #ffffff;
+      --text-sub: #a0a0b0;
+      --border-color: #333340;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation; /* 連打時のズーム防止 */
+      touch-action: manipulation; /* 連打時のダブルタップズームを防止 */
     }
 
     body {
-      background-color: #121212;
-      color: #e0e0e0;
-      padding: 16px;
-      max-width: 480px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 12px;
+      padding-bottom: 40px;
+      max-width: 500px;
       margin: 0 auto;
       user-select: none;
     }
 
-    h1 {
-      font-size: 1.2rem;
-      text-align: center;
-      margin-bottom: 16px;
-      color: #00e676;
-    }
-
-    .card {
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-
-    .mode-selector {
+    header {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .mode-btn {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #333;
-      background-color: #2a2a2a;
-      color: #888;
-      border-radius: 8px;
-      font-weight: bold;
+    .title-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+
+    .app-version {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      background: #2a2a35;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+
+    .config-btn {
+      background: #2a2a35;
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
       cursor: pointer;
     }
 
-    .mode-btn.active {
-      background-color: #00e676;
-      color: #121212;
-      border-color: #00e676;
+    /* タイプ選択トグル */
+    .type-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
-    .label {
-      font-size: 0.85rem;
-      color: #aaa;
-      margin-bottom: 6px;
+    .type-btn {
+      flex: 1;
+      padding: 12px;
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      color: var(--text-sub);
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .type-btn.active {
+      border-color: var(--accent-color);
+      color: #fff;
+      background: #182838;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    }
+
+    /* メインカード */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
     }
 
     .input-group {
+      margin-bottom: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    /* 大きめの数値入力欄 */
+    .big-input {
+      width: 100%;
+      height: 54px;
+      background: #121216;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-align: center;
+      outline: none;
+    }
+
+    .big-input:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* 投資(k)コントロール */
+    .investment-control {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
-    input[type="number"] {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background-color: #2a2a2a;
-      color: #fff;
-      font-size: 1.2rem;
-      text-align: center;
-    }
-
-    .btn {
+    .k-btn {
+      height: 60px;
       border: none;
       border-radius: 8px;
       font-weight: bold;
@@ -92,220 +163,550 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background-color 0.1s;
+      transition: transform 0.1s;
     }
 
-    .btn:active {
-      opacity: 0.7;
+    .k-btn:active {
+      transform: scale(0.96);
     }
 
-    .ctrl-btn {
-      width: 48px;
-      height: 48px;
-      background-color: #333;
-      color: #fff;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .investment-ctrl {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .k-btn {
-      padding: 14px 0;
-      font-size: 1.1rem;
-      border-radius: 8px;
-    }
-
-    .btn-add {
-      background-color: #2196f3;
-      color: #fff;
-    }
-
-    .btn-sub {
-      background-color: #e53935;
-      color: #fff;
-    }
-
-    .result-display {
-      text-align: center;
-      padding: 12px 0;
-    }
-
-    .rate-val {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #00e676;
-      line-height: 1.2;
-    }
-
-    .rate-unit {
-      font-size: 0.9rem;
-      color: #aaa;
-    }
-
-    .status-badge {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 4px 12px;
-      border-radius: 16px;
-      font-size: 0.85rem;
-      font-weight: bold;
-    }
-
-    .status-ok {
-      background-color: rgba(0, 230, 118, 0.2);
-      color: #00e676;
-    }
-
-    .status-ng {
-      background-color: rgba(229, 57, 53, 0.2);
+    .k-btn-minus {
+      width: 60px;
+      background: #3a2228;
       color: #ff5252;
+      font-size: 1.5rem;
+      border: 1px solid #5a2228;
     }
 
-    .status-wait {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #aaa;
+    .k-btn-plus {
+      flex: 1;
+      background: linear-gradient(135deg, #00c853, #009624);
+      color: #fff;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+    }
+
+    .k-display {
+      width: 80px;
+      text-align: center;
+    }
+
+    .k-display-val {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffd700;
+      line-height: 1;
+    }
+
+    .k-display-unit {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    /* アクションボタン群 */
+    .action-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .judge-btn {
+      flex: 2;
+      height: 56px;
+      background: linear-gradient(135deg, #29b6f6, #0288d1);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(41, 182, 246, 0.3);
     }
 
     .reset-btn {
-      width: 100%;
-      padding: 12px;
-      background-color: #2a2a2a;
-      color: #888;
-      border: 1px solid #333;
+      flex: 1;
+      height: 56px;
+      background: #2a2a35;
+      color: #ff5252;
+      border: 1px solid #4a2228;
       border-radius: 8px;
-      margin-top: 12px;
+      font-size: 0.95rem;
       font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    /* 判定結果表示エリア */
+    .result-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      display: none;
+    }
+
+    .result-holder {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .result-stats {
+      display: flex;
+      justify-content: space-around;
+      background: #121216;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    .stat-val {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* 解説エリア */
+    .guide-card {
+      background: #18181c;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.8rem;
+      color: #b0b0c0;
+      line-height: 1.5;
+      border: 1px solid #2a2a35;
+    }
+
+    .guide-title {
+      font-weight: bold;
+      color: var(--accent-color);
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+    }
+
+    .guide-list {
+      list-style: none;
+      margin-bottom: 8px;
+    }
+
+    .guide-list li {
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    /* モーダル */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal {
+      background: var(--card-bg);
+      width: 90%;
+      max-width: 360px;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .modal-input-group {
+      margin-bottom: 12px;
+    }
+
+    .modal-input-group label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+      color: var(--text-sub);
+    }
+
+    .modal-input {
+      width: 100%;
+      height: 40px;
+      background: #121216;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 1rem;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      height: 40px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal-save { background: var(--accent-color); color: #000; }
+    .modal-cancel { background: #333; color: #fff; }
+
+    /* 51%未満：緊急演出 */
+    body.danger-mode {
+      animation: emergency-bg 0.5s infinite alternate;
+    }
+
+    @keyframes emergency-bg {
+      0% { background-color: #2b0000; }
+      100% { background-color: #660000; }
+    }
+
+    .danger-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 0, 0, 0.25);
+      z-index: 1000;
+      pointer-events: all;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    body.danger-mode .danger-overlay {
+      display: flex;
+    }
+
+    .danger-box {
+      background: #000;
+      border: 4px solid #ff0000;
+      box-shadow: 0 0 30px #ff0000;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      animation: danger-pulse 0.3s infinite alternate;
+      max-width: 90%;
+    }
+
+    @keyframes danger-pulse {
+      0% { transform: scale(0.98); }
+      100% { transform: scale(1.02); }
+    }
+
+    .danger-title {
+      color: #ff0000;
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      text-shadow: 0 0 10px #ff0000;
+    }
+
+    .danger-msg {
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    .danger-hint {
+      color: #ffaa00;
+      font-size: 0.85rem;
+    }
+
+    body.danger-mode .lockable {
+      pointer-events: none;
+      opacity: 0.3;
     }
   </style>
 </head>
 <body>
 
-  <h1>回転率分析カウンター</h1>
-
-  <!-- スペック切替 -->
-  <div class="mode-selector">
-    <button class="mode-btn active" id="modeDeka" onclick="setMode('deka')">デカヘソ (3k判定)</button>
-    <button class="mode-btn" id="modeNormal" onclick="setMode('normal')">通常機 (5k判定)</button>
+  <!-- 危険時オーバーレイ（画面ロック） -->
+  <div class="danger-overlay">
+    <div class="danger-box">
+      <div class="danger-title">⚠️ 警告 ⚠️</div>
+      <div class="danger-msg">この台は破損しています！<br>すぐに退避してください！</div>
+      <div class="danger-hint">※解除するには下の「オールリセット」を押してください</div>
+    </div>
   </div>
 
-  <!-- 打ち始め回転数 -->
-  <div class="card">
-    <div class="label">打ち始め回転数</div>
+  <header class="lockable">
+    <div class="title-group">
+      <h1>ボーダーチェッカー</h1>
+      <span class="app-version">v1.0</span>
+    </div>
+    <button class="config-btn" id="openConfig">⚙️ ボーダー設定</button>
+  </header>
+
+  <!-- タイプ選択 -->
+  <div class="type-selector lockable">
+    <button class="type-btn active" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
+    <button class="type-btn" id="typeNormal" onclick="setType('normal')">通常ヘソ<br><small id="dispBorderNormal" style="font-size:0.75rem; font-weight:normal;"></small></button>
+  </div>
+
+  <!-- 回転数・投資入力 -->
+  <div class="card lockable">
     <div class="input-group">
-      <button class="btn ctrl-btn" onclick="adjustValue('startGames', -10)">-10</button>
-      <input type="number" id="startGames" value="0" min="0" oninput="calculate()">
-      <button class="btn ctrl-btn" onclick="adjustValue('startGames', 10)">+10</button>
+      <label for="startRot">打ち始め回転数</label>
+      <input type="number" id="startRot" class="big-input" placeholder="0" inputmode="numeric">
     </div>
-  </div>
 
-  <!-- 現在回転数 -->
-  <div class="card">
-    <div class="label">現在回転数</div>
     <div class="input-group">
-      <button class="btn ctrl-btn" onclick="adjustValue('currentGames', -1)">-1</button>
-      <input type="number" id="currentGames" value="0" min="0" oninput="calculate()">
-      <button class="btn ctrl-btn" onclick="adjustValue('currentGames', 1)">+1</button>
+      <label>投資金額 (1k = 1000円)</label>
+      <div class="investment-control">
+        <button class="k-btn k-btn-minus" onclick="changeK(-1)">-</button>
+        <div class="k-display">
+          <div class="k-display-val" id="kVal">0</div>
+          <div class="k-display-unit">k (千円)</div>
+        </div>
+        <button class="k-btn k-btn-plus" onclick="changeK(1)">+1k</button>
+      </div>
+    </div>
+
+    <div class="input-group" style="margin-bottom: 0;">
+      <label for="currentRot">現在の回転数（1k使い切り毎に更新）</label>
+      <input type="number" id="currentRot" class="big-input" placeholder="0" inputmode="numeric">
     </div>
   </div>
 
-  <!-- 投資額 -->
-  <div class="card">
-    <div class="label">総投資額: <span id="investLabel" style="color:#2196f3; font-weight:bold;">0</span>k円</div>
-    <div class="investment-ctrl">
-      <button class="btn k-btn btn-sub" onclick="addInvestment(-1)">-1k</button>
-      <button class="btn k-btn btn-add" onclick="addInvestment(1)">+1k</button>
-      <button class="btn k-btn btn-add" style="background-color: #ff9800;" onclick="addInvestment(0.5)">+0.5k</button>
+  <!-- 操作ボタン -->
+  <div class="action-group">
+    <button class="judge-btn lockable" onclick="calculate()">判定する</button>
+    <button class="reset-btn" onclick="allReset()">オール<br>リセット</button>
+  </div>
+
+  <!-- 判定結果表示エリア -->
+  <div class="result-card lockable" id="resultCard">
+    <div class="result-holder" id="resRetention">--</div>
+    <div class="result-stats">
+      <div class="stat-item">
+        <div class="stat-label">ボーダー達成率</div>
+        <div class="stat-val" id="resRate">--%</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">1kあたり回転数</div>
+        <div class="stat-val" id="resPerK">-- 回</div>
+      </div>
     </div>
   </div>
 
-  <!-- 計算結果 -->
-  <div class="card">
-    <div class="result-display">
-      <div class="label">現在の回転率</div>
-      <div class="rate-val" id="rateVal">0.0</div>
-      <div class="rate-unit">回転 / 1k</div>
-      <div id="statusBadge" class="status-badge status-wait">投資待ち</div>
+  <!-- 解説＆運用ガイド -->
+  <div class="guide-card lockable">
+    <div class="guide-title">💡 判定・保留連動ルール</div>
+    <ul class="guide-list">
+      <li><span>100% 以上</span><span style="color:#00ffff; font-weight:bold;">🌈 虹保留（神台）</span></li>
+      <li><span>95% 以上</span><span style="color:#ff5252; font-weight:bold;">🔴 赤保留（合格・続行）</span></li>
+      <li><span>90% 以上</span><span style="color:#4caf50; font-weight:bold;">🟢 緑保留（妥協・様子見）</span></li>
+      <li><span>85% 以上</span><span style="color:#2196f3; font-weight:bold;">🔵 青保留（警戒・基本撤退）</span></li>
+      <li><span>51% 以上</span><span style="color:#e0e0e0; font-weight:bold;">⚪ 白保留（激辛・即退散）</span></li>
+      <li><span>51% 未満</span><span style="color:#ff1744; font-weight:bold;">💀 完全撤退（危険）</span></li>
+    </ul>
+    <div style="border-top: 1px solid #2a2a35; padding-top: 6px; margin-top: 6px; font-size: 0.75rem; color: #8a8a9e;">
+      📌 <strong>立ち回り目安：</strong>デカヘソは<strong>3k時点</strong>、通常ヘソは<strong>5k時点</strong>で最終的な合格判断を行うのが最適です。
     </div>
   </div>
 
-  <button class="reset-btn" onclick="resetAll()">データをリセット</button>
+  <footer class="lockable">
+    Border Checker ver 1.0
+  </footer>
+
+  <!-- ボーダー設定モーダル -->
+  <div class="modal-overlay" id="configModal">
+    <div class="modal">
+      <div class="modal-title">ボーダー初期値設定</div>
+      <div class="modal-input-group">
+        <label for="cfgBig">デカヘソ（等価ボーダー）</label>
+        <input type="number" step="0.1" id="cfgBig" class="modal-input">
+      </div>
+      <div class="modal-input-group">
+        <label for="cfgNormal">通常ヘソ（等価ボーダー）</label>
+        <input type="number" step="0.1" id="cfgNormal" class="modal-input">
+      </div>
+      <div class="modal-btns">
+        <button class="modal-btn modal-cancel" id="closeConfig">キャンセル</button>
+        <button class="modal-btn modal-save" id="saveConfig">保存</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    let mode = 'deka';
-    let investment = 0;
+    const LS_KEY_BIG = 'p_border_big';
+    const LS_KEY_NORMAL = 'p_border_normal';
 
-    function setMode(newMode) {
-      mode = newMode;
-      document.getElementById('modeDeka').classList.toggle('active', mode === 'deka');
-      document.getElementById('modeNormal').classList.toggle('active', mode === 'normal');
-      calculate();
+    let currentType = 'big';
+    let currentK = 0;
+    let borderBig = 28.0;
+    let borderNormal = 18.0;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      generateAppleIcon();
+      loadSettings();
+      updateTypeUI();
+    });
+
+    // iPhone用「B」アイコン自動生成 (180x180 PNG Data URI)
+    function generateAppleIcon() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 180;
+      canvas.height = 180;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#121214';
+      ctx.fillRect(0, 0, 180, 180);
+
+      ctx.fillStyle = '#00e5ff';
+      ctx.font = 'bold 125px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('B', 90, 96);
+
+      const iconUrl = canvas.toDataURL('image/png');
+      document.getElementById('appleTouchIcon').href = iconUrl;
     }
 
-    function adjustValue(id, diff) {
-      const input = document.getElementById(id);
-      let val = parseInt(input.value) || 0;
-      val = Math.max(0, val + diff);
-      input.value = val;
-      calculate();
+    // 設定ロード
+    function loadSettings() {
+      const savedBig = localStorage.getItem(LS_KEY_BIG);
+      const savedNormal = localStorage.getItem(LS_KEY_NORMAL);
+
+      borderBig = savedBig ? parseFloat(savedBig) : 28.0;
+      borderNormal = savedNormal ? parseFloat(savedNormal) : 18.0;
+
+      document.getElementById('dispBorderBig').innerText = `(${borderBig.toFixed(1)}/1k)`;
+      document.getElementById('dispBorderNormal').innerText = `(${borderNormal.toFixed(1)}/1k)`;
     }
 
-    function addInvestment(amount) {
-      investment = Math.max(0, investment + amount);
-      document.getElementById('investLabel').textContent = investment;
-      calculate();
+    // タイプ切り替え
+    function setType(type) {
+      currentType = type;
+      updateTypeUI();
     }
 
+    function updateTypeUI() {
+      document.getElementById('typeBig').classList.toggle('active', currentType === 'big');
+      document.getElementById('typeNormal').classList.toggle('active', currentType === 'normal');
+    }
+
+    // 投資kボタン
+    function changeK(delta) {
+      currentK = Math.max(0, currentK + delta);
+      document.getElementById('kVal').innerText = currentK;
+    }
+
+    // 判定処理
     function calculate() {
-      const start = parseInt(document.getElementById('startGames').value) || 0;
-      const current = parseInt(document.getElementById('currentGames').value) || 0;
-      const rateValEl = document.getElementById('rateVal');
-      const badgeEl = document.getElementById('statusBadge');
+      const startRot = parseFloat(document.getElementById('startRot').value);
+      const currentRot = parseFloat(document.getElementById('currentRot').value);
 
-      const rotated = current - start;
-
-      if (investment <= 0 || rotated <= 0) {
-        rateValEl.textContent = '0.0';
-        badgeEl.className = 'status-badge status-wait';
-        badgeEl.textContent = '投資待ち';
+      if (isNaN(startRot) || isNaN(currentRot) || currentK <= 0) {
+        alert('「打ち始め回転数」「投資k」「現在の回転数」を正しい数値で入力してください。');
         return;
       }
 
-      const rate = (rotated / investment).toFixed(1);
-      rateValEl.textContent = rate;
+      if (currentRot <= startRot) {
+        alert('現在の回転数は、打ち始め回転数より大きい値を入力してください。');
+        return;
+      }
 
-      // 判定閾値
-      const targetK = mode === 'deka' ? 3 : 5;
+      const diffRot = currentRot - startRot;
+      const perK = diffRot / currentK;
+      const targetBorder = (currentType === 'big') ? borderBig : borderNormal;
+      const rate = (perK / targetBorder) * 100;
 
-      if (investment < targetK) {
-        badgeEl.className = 'status-badge status-wait';
-        badgeEl.textContent = `判定まであと ${(targetK - investment).toFixed(1)}k`;
+      const resCard = document.getElementById('resultCard');
+      const resRetention = document.getElementById('resRetention');
+      const resRate = document.getElementById('resRate');
+      const resPerK = document.getElementById('resPerK');
+
+      resCard.style.display = 'block';
+      resRate.innerText = `${rate.toFixed(1)}%`;
+      resPerK.innerText = `${perK.toFixed(1)} 回`;
+
+      if (rate >= 100) {
+        resRetention.innerHTML = '<span style="color:#00ffff;">🌈 虹保留</span>';
+      } else if (rate >= 95) {
+        resRetention.innerHTML = '<span style="color:#ff5252;">🔴 赤保留</span>';
+      } else if (rate >= 90) {
+        resRetention.innerHTML = '<span style="color:#4caf50;">🟢 緑保留</span>';
+      } else if (rate >= 85) {
+        resRetention.innerHTML = '<span style="color:#2196f3;">🔵 青保留</span>';
+      } else if (rate >= 51) {
+        resRetention.innerHTML = '<span style="color:#e0e0e0;">⚪ 白保留</span>';
       } else {
-        // 仮のボーダー基準（モードに応じて調整可能）
-        const border = mode === 'deka' ? 25.0 : 17.0;
-        if (parseFloat(rate) >= border) {
-          badgeEl.className = 'status-badge status-ok';
-          badgeEl.textContent = `続行推奨 (ボーダー超え: ${border})`;
-        } else {
-          badgeEl.className = 'status-badge status-ng';
-          badgeEl.textContent = `撤退検討 (ボーダー未満: ${border})`;
-        }
+        resRetention.innerHTML = '<span style="color:#ff1744;">💀 完全撤退</span>';
+        triggerDangerMode();
       }
     }
 
-    function resetAll() {
-      if (!confirm('データをリセットしますか？')) return;
-      document.getElementById('startGames').value = 0;
-      document.getElementById('currentGames').value = 0;
-      investment = 0;
-      document.getElementById('investLabel').textContent = 0;
-      calculate();
+    function triggerDangerMode() {
+      document.body.classList.add('danger-mode');
     }
+
+    function allReset() {
+      document.body.classList.remove('danger-mode');
+      document.getElementById('startRot').value = '';
+      document.getElementById('currentRot').value = '';
+      currentK = 0;
+      document.getElementById('kVal').innerText = '0';
+      document.getElementById('resultCard').style.display = 'none';
+    }
+
+    // モーダル管理
+    const modal = document.getElementById('configModal');
+    document.getElementById('openConfig').addEventListener('click', () => {
+      document.getElementById('cfgBig').value = borderBig;
+      document.getElementById('cfgNormal').value = borderNormal;
+      modal.style.display = 'flex';
+    });
+
+    document.getElementById('closeConfig').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    document.getElementById('saveConfig').addEventListener('click', () => {
+      const newBig = parseFloat(document.getElementById('cfgBig').value);
+      const newNormal = parseFloat(document.getElementById('cfgNormal').value);
+
+      if (!isNaN(newBig) && newBig > 0) borderBig = newBig;
+      if (!isNaN(newNormal) && newNormal > 0) borderNormal = newNormal;
+
+      localStorage.setItem(LS_KEY_BIG, borderBig);
+      localStorage.setItem(LS_KEY_NORMAL, borderNormal);
+
+      loadSettings();
+      modal.style.display = 'none';
+    });
   </script>
 </body>
 </html>
