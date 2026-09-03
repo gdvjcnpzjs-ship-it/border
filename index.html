@@ -479,9 +479,9 @@
     <button class="config-btn" id="openConfig">⚙️ ボーダー設定</button>
   </header>
 
-  <!-- タイプ選択 -->
+  <!-- タイプ選択（初期は未選択） -->
   <div class="type-selector lockable">
-    <button class="type-btn active" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
+    <button class="type-btn" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
     <button class="type-btn" id="typeNormal" onclick="setType('normal')">通常ヘソ<br><small id="dispBorderNormal" style="font-size:0.75rem; font-weight:normal;"></small></button>
   </div>
 
@@ -574,7 +574,7 @@
     const LS_KEY_BIG = 'p_border_big';
     const LS_KEY_NORMAL = 'p_border_normal';
 
-    let currentType = 'big';
+    let currentType = null; // 初期値は未選択 (null)
     let currentK = 0;
     let borderBig = 28.0;
     let borderNormal = 18.0;
@@ -636,6 +636,11 @@
 
     // 判定処理
     function calculate() {
+      if (!currentType) {
+        alert('スペック（「デカヘソ」または「通常ヘソ」）を選択してください。');
+        return;
+      }
+
       const startRot = parseFloat(document.getElementById('startRot').value);
       const currentRot = parseFloat(document.getElementById('currentRot').value);
 
@@ -688,6 +693,8 @@
       document.getElementById('startRot').value = '';
       document.getElementById('currentRot').value = '';
       currentK = 0;
+      currentType = null; // リセット時に未選択状態へ戻す
+      updateTypeUI();
       document.getElementById('kVal').innerText = '0';
       document.getElementById('resultCard').style.display = 'none';
     }
