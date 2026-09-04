@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="ボーダーチェッカー">
-  <title>パチンコボーダーチェッカー v1.0</title>
+  <meta name="apple-mobile-web-app-title" content="パチツール">
+  <title>パチンコ総合ツール v2.0</title>
 
   <!-- iPhoneホーム画面用アイコン -->
   <link rel="apple-touch-icon" id="appleTouchIcon">
@@ -46,7 +46,6 @@
       align-items: center;
       margin-bottom: 12px;
       padding-bottom: 8px;
-      border-bottom: 1px solid var(--border-color);
     }
 
     .title-group {
@@ -81,6 +80,60 @@
       cursor: pointer;
     }
 
+    /* タブUI */
+    .tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: #182838;
+      color: var(--accent-color);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 共通カード */
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* --- ボーダー計測用スタイル --- */
     .type-selector {
       display: flex;
       gap: 8px;
@@ -106,14 +159,6 @@
       color: #fff;
       background: #182838;
       box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border-color);
     }
 
     .input-group {
@@ -298,6 +343,108 @@
       justify-content: space-between;
     }
 
+    /* --- 釘チェック用スタイル --- */
+    .nail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .nail-name {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+
+    .nail-ideal {
+      font-size: 0.75rem;
+      background: rgba(0, 229, 255, 0.1);
+      color: var(--accent-color);
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+
+    .nail-desc {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .nail-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nail-btn {
+      flex: 1;
+      padding: 10px 0;
+      background: #121216;
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nail-btn.selected-good {
+      background: rgba(0, 200, 83, 0.15);
+      color: #00e676;
+      border-color: #00c853;
+    }
+
+    .nail-btn.selected-even {
+      background: rgba(171, 171, 171, 0.15);
+      color: #e0e0e0;
+      border-color: #757575;
+    }
+
+    .nail-btn.selected-bad {
+      background: rgba(255, 82, 82, 0.15);
+      color: #ff5252;
+      border-color: #ff1744;
+    }
+
+    .nail-summary-card {
+      position: sticky;
+      bottom: 12px;
+      background: #182838;
+      border: 1px solid var(--accent-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5), 0 0 10px rgba(0,229,255,0.2);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+    }
+
+    .nail-score-title {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      margin-bottom: 2px;
+    }
+
+    .nail-score-val {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .nail-reset {
+      background: #2a2a35;
+      color: #ff5252;
+      border: 1px solid #4a2228;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
     footer {
       text-align: center;
       margin-top: 20px;
@@ -305,6 +452,7 @@
       color: var(--text-sub);
     }
 
+    /* モーダル＆オーバーレイ */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -370,15 +518,14 @@
     .modal-save { background: var(--accent-color); color: #000; }
     .modal-cancel { background: #333; color: #fff; }
 
+    /* デンジャーモード */
     body.danger-mode {
       animation: emergency-bg 0.5s infinite alternate;
     }
-
     @keyframes emergency-bg {
       0% { background-color: #2b0000; }
       100% { background-color: #660000; }
     }
-
     .danger-overlay {
       display: none;
       position: fixed;
@@ -390,11 +537,7 @@
       padding: 20px;
       box-sizing: border-box;
     }
-
-    body.danger-mode .danger-overlay {
-      display: flex;
-    }
-
+    body.danger-mode .danger-overlay { display: flex; }
     .danger-box {
       background: #000;
       border: 4px solid #ff0000;
@@ -406,12 +549,10 @@
       max-width: 320px;
       width: 100%;
     }
-
     @keyframes danger-pulse {
       0% { transform: scale(0.98); }
       100% { transform: scale(1.02); }
     }
-
     .danger-title {
       color: #ff0000;
       font-size: 1.6rem;
@@ -419,7 +560,6 @@
       margin-bottom: 12px;
       text-shadow: 0 0 10px #ff0000;
     }
-
     .danger-msg {
       color: #ffffff;
       font-size: 1.1rem;
@@ -427,7 +567,6 @@
       line-height: 1.4;
       margin-bottom: 16px;
     }
-
     .danger-reset-btn {
       width: 100%;
       height: 48px;
@@ -440,15 +579,7 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(255, 23, 68, 0.5);
     }
-
-    .danger-reset-btn:active {
-      transform: scale(0.97);
-    }
-
-    body.danger-mode .lockable {
-      pointer-events: none;
-      opacity: 0.3;
-    }
+    body.danger-mode .lockable { pointer-events: none; opacity: 0.3; }
   </style>
 </head>
 <body>
@@ -464,85 +595,104 @@
 
   <header class="lockable">
     <div class="title-group">
-      <h1>ボーダーチェッカー</h1>
-      <span class="app-version">v1.0</span>
+      <h1>パチツール</h1>
+      <span class="app-version">v2.0</span>
     </div>
-    <button class="config-btn" id="openConfig">⚙️ ボーダー設定</button>
+    <button class="config-btn" id="openConfig">⚙️ 設定</button>
   </header>
 
-  <!-- タイプ選択 -->
-  <div class="type-selector lockable">
-    <button class="type-btn" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
-    <button class="type-btn" id="typeNormal" onclick="setType('normal')">通常ヘソ<br><small id="dispBorderNormal" style="font-size:0.75rem; font-weight:normal;"></small></button>
+  <!-- タブナビゲーション -->
+  <div class="tabs lockable">
+    <button class="tab-btn active" onclick="switchTab('border')">ボーダー計測</button>
+    <button class="tab-btn" onclick="switchTab('nail')">釘チェック</button>
   </div>
 
-  <!-- 回転数・投資入力 -->
-  <div class="card lockable">
-    <div class="input-group">
-      <label for="startRot">打ち始め回転数</label>
-      <input type="number" id="startRot" class="big-input" placeholder="0" inputmode="numeric">
+  <!-- ================= タブ1：ボーダー計測 ================= -->
+  <div id="tab-border" class="tab-content active lockable">
+    
+    <div class="type-selector">
+      <button class="type-btn" id="typeBig" onclick="setType('big')">デカヘソ<br><small id="dispBorderBig" style="font-size:0.75rem; font-weight:normal;"></small></button>
+      <button class="type-btn" id="typeNormal" onclick="setType('normal')">通常ヘソ<br><small id="dispBorderNormal" style="font-size:0.75rem; font-weight:normal;"></small></button>
     </div>
 
-    <div class="input-group">
-      <label>投資金額 (1k = 1000円)</label>
-      <div class="investment-control">
-        <button class="k-btn k-btn-minus" onclick="changeK(-1)">-</button>
-        <div class="k-display">
-          <div class="k-display-val" id="kVal">0</div>
-          <div class="k-display-unit">k (千円)</div>
+    <div class="card">
+      <div class="input-group">
+        <label for="startRot">打ち始め回転数</label>
+        <input type="number" id="startRot" class="big-input" placeholder="0" inputmode="numeric">
+      </div>
+
+      <div class="input-group">
+        <label>投資金額 (1k = 1000円)</label>
+        <div class="investment-control">
+          <button class="k-btn k-btn-minus" onclick="changeK(-1)">-</button>
+          <div class="k-display">
+            <div class="k-display-val" id="kVal">0</div>
+            <div class="k-display-unit">k (千円)</div>
+          </div>
+          <button class="k-btn k-btn-plus" onclick="changeK(1)">+1k</button>
         </div>
-        <button class="k-btn k-btn-plus" onclick="changeK(1)">+1k</button>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 0;">
+        <label for="currentRot">現在の回転数（1k使い切り毎に更新）</label>
+        <input type="number" id="currentRot" class="big-input" placeholder="0" inputmode="numeric">
       </div>
     </div>
 
-    <div class="input-group" style="margin-bottom: 0;">
-      <label for="currentRot">現在の回転数（1k使い切り毎に更新）</label>
-      <input type="number" id="currentRot" class="big-input" placeholder="0" inputmode="numeric">
+    <div class="action-group">
+      <button class="judge-btn" onclick="calculate()">判定する</button>
+      <button class="reset-btn" onclick="allReset()">リセット</button>
     </div>
-  </div>
 
-  <!-- 操作ボタン -->
-  <div class="action-group">
-    <button class="judge-btn lockable" onclick="calculate()">判定する</button>
-    <button class="reset-btn lockable" onclick="allReset()">オール<br>リセット</button>
-  </div>
-
-  <!-- 判定結果表示エリア -->
-  <div class="result-card lockable" id="resultCard">
-    <div class="result-holder" id="resRetention">--</div>
-    <div class="result-stats">
-      <div class="stat-item">
-        <div class="stat-label">ボーダー達成率</div>
-        <div class="stat-val" id="resRate">--%</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-label">1kあたり回転数</div>
-        <div class="stat-val" id="resPerK">-- 回</div>
+    <div class="result-card" id="resultCard">
+      <div class="result-holder" id="resRetention">--</div>
+      <div class="result-stats">
+        <div class="stat-item">
+          <div class="stat-label">ボーダー達成率</div>
+          <div class="stat-val" id="resRate">--%</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">1kあたり回転数</div>
+          <div class="stat-val" id="resPerK">-- 回</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 解説＆運用ガイド -->
-  <div class="guide-card lockable">
-    <div class="guide-title">💡 判定・保留連動ルール</div>
-    <ul class="guide-list">
-      <li><span>100% 以上</span><span style="color:#00ffff; font-weight:bold;">🌈 虹保留（神台）</span></li>
-      <li><span>95% 以上</span><span style="color:#ff5252; font-weight:bold;">🔴 赤保留（合格・続行）</span></li>
-      <li><span>90% 以上</span><span style="color:#4caf50; font-weight:bold;">🟢 緑保留（妥協・様子見）</span></li>
-      <li><span>85% 以上</span><span style="color:#2196f3; font-weight:bold;">🔵 青保留（警戒・基本撤退）</span></li>
-      <li><span>51% 以上</span><span style="color:#e0e0e0; font-weight:bold;">⚪ 白保留（激辛・即退散）</span></li>
-      <li><span>51% 未満</span><span style="color:#ff1744; font-weight:bold;">💀 完全撤退（危険）</span></li>
-    </ul>
-    <div style="border-top: 1px solid #2a2a35; padding-top: 6px; margin-top: 6px; font-size: 0.75rem; color: #8a8a9e;">
-      📌 <strong>立ち回り目安：</strong>デカヘソは<strong>3k時点</strong>、通常ヘソは<strong>5k時点</strong>で最終的な合格判断を行うのが最適です。
+    <div class="guide-card">
+      <div class="guide-title">💡 判定・保留連動ルール</div>
+      <ul class="guide-list">
+        <li><span>100% 以上</span><span style="color:#00ffff; font-weight:bold;">🌈 虹保留（神台）</span></li>
+        <li><span>95% 以上</span><span style="color:#ff5252; font-weight:bold;">🔴 赤保留（合格・続行）</span></li>
+        <li><span>90% 以上</span><span style="color:#4caf50; font-weight:bold;">🟢 緑保留（妥協・様子見）</span></li>
+        <li><span>85% 以上</span><span style="color:#2196f3; font-weight:bold;">🔵 青保留（警戒・基本撤退）</span></li>
+        <li><span>51% 以上</span><span style="color:#e0e0e0; font-weight:bold;">⚪ 白保留（激辛・即退散）</span></li>
+        <li><span>51% 未満</span><span style="color:#ff1744; font-weight:bold;">💀 完全撤退（危険）</span></li>
+      </ul>
+      <div style="border-top: 1px solid #2a2a35; padding-top: 6px; margin-top: 6px; font-size: 0.75rem; color: #8a8a9e;">
+        📌 <strong>立ち回り目安：</strong>デカヘソは<strong>3k時点</strong>、通常ヘソは<strong>5k時点</strong>で最終的な合格判断を行うのが最適です。
+      </div>
     </div>
   </div>
 
+  <!-- ================= タブ2：釘チェック ================= -->
+  <div id="tab-nail" class="tab-content lockable">
+    <div id="nail-container"></div>
+    
+    <!-- スティッキー（追従）フッター -->
+    <div class="card nail-summary-card">
+      <div>
+        <div class="nail-score-title">総合評価</div>
+        <div class="nail-score-val" id="nail-total-score">-</div>
+      </div>
+      <button class="nail-reset" onclick="resetNailForm()">リセット</button>
+    </div>
+  </div>
+
+  <!-- ================= モーダル類 ================= -->
   <footer class="lockable">
-    Border Checker ver 1.0
+    Pachi Tool ver 2.0
   </footer>
 
-  <!-- ボーダー設定モーダル -->
   <div class="modal-overlay" id="configModal">
     <div class="modal">
       <div class="modal-title">ボーダー初期値設定</div>
@@ -562,59 +712,70 @@
   </div>
 
   <script>
+    /* ====================================================
+       共通設定＆初期化
+       ==================================================== */
     const LS_KEY_BIG = 'p_border_big';
     const LS_KEY_NORMAL = 'p_border_normal';
     const LS_KEY_SESSION = 'p_border_session_data';
-
-    let currentType = null;
-    let currentK = 0;
-    let borderBig = 28.0;
-    let borderNormal = 18.0;
+    const LS_KEY_NAIL = 'p_nail_session_data';
 
     window.addEventListener('DOMContentLoaded', () => {
       generateAppleIcon();
+      
+      // ボーダー初期化
       loadSettings();
       loadSessionState();
       updateTypeUI();
-
-      // 入力値変更の度に自動保存
       document.getElementById('startRot').addEventListener('input', saveSessionState);
       document.getElementById('currentRot').addEventListener('input', saveSessionState);
+
+      // 釘チェック初期化
+      loadNailState();
+      renderNails();
     });
 
-    // iPhone用アイコン自動生成
     function generateAppleIcon() {
       const canvas = document.createElement('canvas');
       canvas.width = 180;
       canvas.height = 180;
       const ctx = canvas.getContext('2d');
-
       ctx.fillStyle = '#121214';
       ctx.fillRect(0, 0, 180, 180);
-
       ctx.fillStyle = '#00e5ff';
       ctx.font = 'bold 125px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('B', 90, 96);
-
-      const iconUrl = canvas.toDataURL('image/png');
-      document.getElementById('appleTouchIcon').href = iconUrl;
+      ctx.fillText('P', 90, 96);
+      document.getElementById('appleTouchIcon').href = canvas.toDataURL('image/png');
     }
 
-    // 設定ロード
+    // タブ切り替え処理
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    /* ====================================================
+       ボーダー計測 ロジック
+       ==================================================== */
+    let currentType = null;
+    let currentK = 0;
+    let borderBig = 28.0;
+    let borderNormal = 18.0;
+
     function loadSettings() {
       const savedBig = localStorage.getItem(LS_KEY_BIG);
       const savedNormal = localStorage.getItem(LS_KEY_NORMAL);
-
       borderBig = savedBig ? parseFloat(savedBig) : 28.0;
       borderNormal = savedNormal ? parseFloat(savedNormal) : 18.0;
-
       document.getElementById('dispBorderBig').innerText = `(${borderBig.toFixed(1)}/1k)`;
       document.getElementById('dispBorderNormal').innerText = `(${borderNormal.toFixed(1)}/1k)`;
     }
 
-    // 計測セッション状態の保存
     function saveSessionState() {
       const session = {
         startRot: document.getElementById('startRot').value,
@@ -626,11 +787,9 @@
       localStorage.setItem(LS_KEY_SESSION, JSON.stringify(session));
     }
 
-    // 計測セッション状態の復元
     function loadSessionState() {
       const saved = localStorage.getItem(LS_KEY_SESSION);
       if (!saved) return;
-
       try {
         const session = JSON.parse(saved);
         if (session.startRot !== undefined) document.getElementById('startRot').value = session.startRot;
@@ -639,18 +798,11 @@
           currentK = parseInt(session.currentK, 10) || 0;
           document.getElementById('kVal').innerText = currentK;
         }
-        if (session.currentType) {
-          currentType = session.currentType;
-        }
-        if (session.hasCalculated && currentType && currentK > 0) {
-          calculate(true); // サイレント再計算（アラート抑止）
-        }
-      } catch (e) {
-        console.error('Session restore failed:', e);
-      }
+        if (session.currentType) currentType = session.currentType;
+        if (session.hasCalculated && currentType && currentK > 0) calculate(true);
+      } catch (e) { console.error(e); }
     }
 
-    // タイプ切り替え
     function setType(type) {
       currentType = type;
       updateTypeUI();
@@ -662,14 +814,12 @@
       document.getElementById('typeNormal').classList.toggle('active', currentType === 'normal');
     }
 
-    // 投資kボタン
     function changeK(delta) {
       currentK = Math.max(0, currentK + delta);
       document.getElementById('kVal').innerText = currentK;
       saveSessionState();
     }
 
-    // 判定処理 (isRestore = 復元時判定フラグ)
     function calculate(isRestore = false) {
       if (!currentType) {
         if (!isRestore) alert('スペック（「デカヘソ」または「通常ヘソ」）を選択してください。');
@@ -683,7 +833,6 @@
         if (!isRestore) alert('「打ち始め回転数」「投資k」「現在の回転数」を正しい数値で入力してください。');
         return;
       }
-
       if (currentRot <= startRot) {
         if (!isRestore) alert('現在の回転数は、打ち始め回転数より大きい値を入力してください。');
         return;
@@ -696,34 +845,24 @@
 
       const resCard = document.getElementById('resultCard');
       const resRetention = document.getElementById('resRetention');
-      const resRate = document.getElementById('resRate');
-      const resPerK = document.getElementById('resPerK');
-
+      
       resCard.style.display = 'block';
-      resRate.innerText = `${rate.toFixed(1)}%`;
-      resPerK.innerText = `${perK.toFixed(1)} 回`;
+      document.getElementById('resRate').innerText = `${rate.toFixed(1)}%`;
+      document.getElementById('resPerK').innerText = `${perK.toFixed(1)} 回`;
 
-      if (rate >= 100) {
-        resRetention.innerHTML = '<span style="color:#00ffff;">🌈 虹保留</span>';
-      } else if (rate >= 95) {
-        resRetention.innerHTML = '<span style="color:#ff5252;">🔴 赤保留</span>';
-      } else if (rate >= 90) {
-        resRetention.innerHTML = '<span style="color:#4caf50;">🟢 緑保留</span>';
-      } else if (rate >= 85) {
-        resRetention.innerHTML = '<span style="color:#2196f3;">🔵 青保留</span>';
-      } else if (rate >= 51) {
-        resRetention.innerHTML = '<span style="color:#e0e0e0;">⚪ 白保留</span>';
-      } else {
+      if (rate >= 100) resRetention.innerHTML = '<span style="color:#00ffff;">🌈 虹保留</span>';
+      else if (rate >= 95) resRetention.innerHTML = '<span style="color:#ff5252;">🔴 赤保留</span>';
+      else if (rate >= 90) resRetention.innerHTML = '<span style="color:#4caf50;">🟢 緑保留</span>';
+      else if (rate >= 85) resRetention.innerHTML = '<span style="color:#2196f3;">🔵 青保留</span>';
+      else if (rate >= 51) resRetention.innerHTML = '<span style="color:#e0e0e0;">⚪ 白保留</span>';
+      else {
         resRetention.innerHTML = '<span style="color:#ff1744;">💀 完全撤退</span>';
         triggerDangerMode();
       }
-
       saveSessionState();
     }
 
-    function triggerDangerMode() {
-      document.body.classList.add('danger-mode');
-    }
+    function triggerDangerMode() { document.body.classList.add('danger-mode'); }
 
     function allReset() {
       localStorage.removeItem(LS_KEY_SESSION);
@@ -744,24 +883,115 @@
       document.getElementById('cfgNormal').value = borderNormal;
       modal.style.display = 'flex';
     });
-
-    document.getElementById('closeConfig').addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-
+    document.getElementById('closeConfig').addEventListener('click', () => modal.style.display = 'none');
     document.getElementById('saveConfig').addEventListener('click', () => {
       const newBig = parseFloat(document.getElementById('cfgBig').value);
       const newNormal = parseFloat(document.getElementById('cfgNormal').value);
-
       if (!isNaN(newBig) && newBig > 0) borderBig = newBig;
       if (!isNaN(newNormal) && newNormal > 0) borderNormal = newNormal;
-
       localStorage.setItem(LS_KEY_BIG, borderBig);
       localStorage.setItem(LS_KEY_NORMAL, borderNormal);
-
       loadSettings();
       modal.style.display = 'none';
     });
+
+    /* ====================================================
+       釘チェック ロジック
+       ==================================================== */
+    const nailPoints = [
+      { id: 'heso', name: '1. ヘソ釘（幅）', ideal: '広い（外開き）', desc: '真前から見て左右の間隔が広がっているか' },
+      { id: 'heso_angle', name: '2. ヘソ釘（角度）', ideal: '上向き（上げ釘）', desc: '横から見て先端が上がっているか' },
+      { id: 'jump', name: '3. ジャンプ釘', ideal: '上向き', desc: 'ヘソ左下の釘が上がって跳ね上げやすいか' },
+      { id: 'michi', name: '4. 道釘', ideal: '均一・なだらか', desc: '隙間がなく玉が途中で下に落ちないか' },
+      { id: 'fusha', name: '5. 風車', ideal: '左寄り（左上）', desc: '下から見て軸が左を向いているか' },
+      { id: 'hakama', name: '6. 袴（寄り釘）', ideal: '上部が狭い', desc: 'ハの字の上側が狭く外へ逃げにくいか' },
+      { id: 'warp', name: '7. ワープ入り口', ideal: '広い', desc: 'ステージに向かうルートが開いているか' }
+    ];
+
+    let nailState = {};
+
+    function loadNailState() {
+      const saved = localStorage.getItem(LS_KEY_NAIL);
+      if (saved) {
+        try { nailState = JSON.parse(saved); } catch (e) { nailState = {}; }
+      }
+    }
+
+    function saveNailState() {
+      localStorage.setItem(LS_KEY_NAIL, JSON.stringify(nailState));
+    }
+
+    function renderNails() {
+      const container = document.getElementById('nail-container');
+      container.innerHTML = '';
+
+      nailPoints.forEach(p => {
+        const val = nailState[p.id];
+        const btnGood = val === 'good' ? 'selected-good' : '';
+        const btnEven = val === 'even' ? 'selected-even' : '';
+        const btnBad = val === 'bad' ? 'selected-bad' : '';
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="nail-header">
+            <span class="nail-name">${p.name}</span>
+            <span class="nail-ideal">理想: ${p.ideal}</span>
+          </div>
+          <div class="nail-desc">${p.desc}</div>
+          <div class="nail-btns">
+            <button class="nail-btn ${btnGood}" onclick="selectNail('${p.id}', 'good')">良 (+1)</button>
+            <button class="nail-btn ${btnEven}" onclick="selectNail('${p.id}', 'even')">普 (0)</button>
+            <button class="nail-btn ${btnBad}" onclick="selectNail('${p.id}', 'bad')">悪 (-1)</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateNailScore();
+    }
+
+    function selectNail(id, val) {
+      nailState[id] = val;
+      saveNailState();
+      renderNails();
+    }
+
+    function updateNailScore() {
+      const values = Object.values(nailState);
+      const display = document.getElementById('nail-total-score');
+      
+      if (values.length === 0) {
+        display.innerText = '-';
+        display.style.color = '#fff';
+        return;
+      }
+
+      let score = 0;
+      values.forEach(v => {
+        if (v === 'good') score += 1;
+        if (v === 'bad') score -= 1;
+      });
+
+      let rank = '';
+      let color = '#fff';
+      
+      if (score >= 4) { rank = '🔥 期待大'; color = '#00e5ff'; }
+      else if (score >= 2) { rank = '👍 プラス傾向'; color = '#00e676'; }
+      else if (score <= -2) { rank = '⚠️ 回らない可能性高'; color = '#ff5252'; }
+      else { rank = '⚪ 微妙'; color = '#e0e0e0'; }
+
+      display.innerText = `${score}点 (${rank})`;
+      display.style.color = color;
+    }
+
+    function resetNailForm() {
+      if(confirm('釘チェックの内容をリセットしますか？')) {
+        nailState = {};
+        saveNailState();
+        renderNails();
+      }
+    }
   </script>
 </body>
 </html>
